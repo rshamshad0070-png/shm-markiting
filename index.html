@@ -1,0 +1,373 @@
+<!doctype html>
+<html lang="ur" dir="rtl">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>SHM Markiting — آن لائن اسٹور</title>
+  <meta name="description" content="SHM Markiting — پروڈکٹس بیچنے کا پرو لیول ڈیمو اسٹور" />
+  <meta name="keywords" content="SHM, Markiting, Online Store, Shop, Pakistan" />
+  <style>
+    /* Simple modern RTL styling - responsive */
+    :root{--accent:#2b6cb0;--muted:#64748b;--card:#ffffff;--bg:#f1f5f9}
+    *{box-sizing:border-box}
+    html,body{height:100%;margin:0;font-family:Inter, 'Noto Nastaliq Urdu', system-ui, sans-serif;background:var(--bg);color:#0b1b2b}
+    a{color:inherit}
+    .site{max-width:1100px;margin:18px auto;padding:16px}
+    header{display:flex;align-items:center;justify-content:space-between;gap:12px}
+    .brand{display:flex;align-items:center;gap:12px}
+    .logo{width:52px;height:52px;border-radius:12px;background:linear-gradient(135deg,#38bdf8,#60a5fa);display:flex;align-items:center;justify-content:center;color:white;font-weight:800}
+    nav{display:flex;gap:10px;align-items:center}
+    nav a{padding:8px 12px;border-radius:8px;text-decoration:none;font-weight:600}
+    nav a.active{background:rgba(43,108,176,0.12);color:var(--accent)}
+    .search{flex:1;display:flex;justify-content:center}
+    .search input{width:100%;max-width:480px;padding:10px 12px;border-radius:10px;border:1px solid #e2e8f0}
+    .main{display:grid;grid-template-columns:1fr;gap:16px;margin-top:18px}
+    .hero{background:linear-gradient(180deg,#ffffff,#f8fafc);padding:18px;border-radius:12px;display:flex;justify-content:space-between;align-items:center}
+
+    /* product grid */
+    .products{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:14px}
+    .card{background:var(--card);padding:12px;border-radius:12px;box-shadow:0 6px 18px rgba(11,27,43,0.06)}
+    .card img{width:100%;height:160px;object-fit:cover;border-radius:8px}
+    .card h4{margin:8px 0 6px;font-size:16px}
+    .price{font-weight:800;color:var(--accent)}
+    .muted{color:var(--muted);font-size:13px}
+    .btn{display:inline-block;padding:8px 12px;border-radius:8px;background:var(--accent);color:white;font-weight:700;text-decoration:none}
+
+    /* cart */
+    .cart{position:fixed;left:18px;bottom:18px;background:linear-gradient(180deg,#ffffff,#f8fafc);padding:10px;border-radius:12px;box-shadow:0 10px 30px rgba(11,27,43,0.08);width:320px;max-width:90%;}
+    .cart h3{margin:0 0 8px}
+    .cart-list{max-height:260px;overflow:auto;margin-bottom:8px}
+    .cart-item{display:flex;gap:8px;align-items:center;padding:8px;border-radius:8px}
+    .cart-item img{width:56px;height:56px;object-fit:cover;border-radius:8px}
+
+    /* pages */
+    .page{display:none}
+    .page.active{display:block}
+    footer{margin-top:18px;padding:12px;text-align:center;color:var(--muted);font-size:13px}
+
+    /* admin modal */
+    .modal{position:fixed;inset:0;background:rgba(11,27,43,0.5);display:flex;align-items:center;justify-content:center}
+    .modal .panel{background:white;padding:16px;border-radius:12px;width:420px;max-width:95%}
+
+    /* responsive */
+    @media(min-width:900px){.main{grid-template-columns:1fr 320px}.cart{position:static;width:100%}}
+  </style>
+</head>
+<body>
+  <div class="site">
+    <header>
+      <div class="brand">
+        <div class="logo">SM</div>
+        <div>
+          <div style="font-weight:900">SHM Markiting</div>
+          <div class="muted">Pro / Premium demo store</div>
+        </div>
+      </div>
+
+      <div class="search">
+        <input id="search" placeholder="Search products..." />
+      </div>
+
+      <nav>
+        <a href="#home" data-route="#home" class="navlink active">Home</a>
+        <a href="#about" data-route="#about" class="navlink">About</a>
+        <a href="#contact" data-route="#contact" class="navlink">Contact</a>
+        <a href="#policy" data-route="#policy" class="navlink">Privacy</a>
+        <a href="#admin" data-route="#admin" class="navlink">Admin</a>
+      </nav>
+    </header>
+
+    <main class="main">
+      <section class="page" id="home">
+        <div class="hero card">
+          <div>
+            <h2>خوش آمدید — SHM Markiting</h2>
+            <p class="muted">Daraz جیسی look & feel، آسان checkout، اور mobile-first ڈیزائن۔</p>
+            <div style="margin-top:10px">
+              <a class="btn" href="#products" onclick="location.hash='#products'">Shop Now</a>
+            </div>
+          </div>
+          <div style="max-width:360px;text-align:left">
+            <img src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='360' height='180'><rect width='100%' height='100%' fill='%23eef2ff'/><text x='50%' y='50%' dominant-baseline='middle' text-anchor='middle' font-size='18' fill='%236b7280'>SHM Markiting — Product Showcase</text></svg>" alt="hero" style="width:100%;border-radius:8px" />
+          </div>
+        </div>
+
+        <div style="margin-top:12px">
+          <h3>Featured Products</h3>
+          <div id="products" class="products"></div>
+        </div>
+      </section>
+
+      <aside class="page card" id="cartPage" style="padding:12px">
+        <div style="display:flex;justify-content:space-between;align-items:center">
+          <h3>Cart</h3>
+          <div class="muted">Items: <span id="cartCount">0</span></div>
+        </div>
+        <div class="cart-list" id="cartList"></div>
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-top:8px">
+          <div class="muted">Total:</div>
+          <div style="font-weight:900">Rs <span id="cartTotal">0</span></div>
+        </div>
+        <div style="margin-top:10px;display:flex;gap:8px">
+          <button class="btn" id="checkoutBtn">Checkout</button>
+          <button class="btn" style="background:#94a3b8" id="clearCart">Clear</button>
+        </div>
+      </aside>
+
+      <section class="page" id="about">
+        <div class="card">
+          <h2>About Us</h2>
+          <p>SHM Markiting is a demo premium store built to showcase a modern e-commerce frontend. This demo includes product listings, cart, checkout flow (mock), and admin product management saved in browser storage. For production you'll connect a real backend, database, and payment gateways like JazzCash/Easypaisa or international providers.</p>
+        </div>
+      </section>
+
+      <section class="page" id="contact">
+        <div class="card">
+          <h2>Contact Us</h2>
+          <p>ایمیل: rshamshad0070@gmail.com</p>
+          <p>WhatsApp: +92 307 8685278</p>
+          <form id="contactForm">
+            <div style="display:flex;gap:8px;flex-direction:column">
+              <input id="cname" placeholder="Your name" />
+              <input id="cemail" placeholder="Email" />
+              <textarea id="cmsg" placeholder="Message" rows="4"></textarea>
+              <button class="btn" type="submit">Send</button>
+            </div>
+          </form>
+        </div>
+      </section>
+
+      <section class="page" id="policy">
+        <div class="card">
+          <h2>Privacy / Terms / Disclaimer / Copyright</h2>
+          <h3>Privacy</h3>
+          <p>We respect your privacy. This demo stores product and cart data in browser localStorage only. No third-party tracking in this demo.</p>
+          <h3>Terms</h3>
+          <p>All sales are subject to availability. This demo is for demonstration purposes only.</p>
+          <h3>Disclaimer</h3>
+          <p>SHM Markiting is a demo. For real operations integrate a secure backend, SSL, and payment processors.</p>
+          <h3>Copyright</h3>
+          <p>© 2025 SHM Markiting. All rights reserved.</p>
+        </div>
+      </section>
+
+      <!-- admin modal page -->
+      <section class="page" id="admin">
+        <div class="card">
+          <h2>Admin — Product Manager</h2>
+          <p class="muted">Simple browser-only admin. For production use server auth + database.</p>
+
+          <div id="adminArea">
+            <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:8px">
+              <input id="p_title" placeholder="Product title" />
+              <input id="p_price" placeholder="Price (PKR)" type="number" />
+              <input id="p_image" placeholder="Image URL (optional)" />
+              <button class="btn" id="addProduct">Add / Update</button>
+            </div>
+            <div class="muted">Hint: This demo saves items to your browser localStorage. Admin password: <strong>shmadmin</strong></div>
+            <div style="margin-top:12px">
+              <h4>Current Products</h4>
+              <div id="adminList"></div>
+            </div>
+            <div style="margin-top:12px">
+              <button id="exportData" class="btn" style="background:#16a34a">Export JSON</button>
+              <button id="importData" class="btn" style="background:#0ea5e9">Import JSON</button>
+            </div>
+          </div>
+
+        </div>
+      </section>
+
+      <footer>© SHM Markiting — Built for demo. Contact: rshamshad0070@gmail.com</footer>
+    </main>
+  </div>
+
+  <template id="productTemplate">
+    <div class="card">
+      <img src="" alt="product" />
+      <h4></h4>
+      <div class="muted">SKU: <span class="sku"></span></div>
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-top:8px">
+        <div class="price">Rs <span class="priceVal"></span></div>
+        <button class="btn addToCart">Add</button>
+      </div>
+    </div>
+  </template>
+
+  <script>
+    // ----- Simple SPA routing -----
+    const routes = ['#home','#products','#about','#contact','#policy','#admin'];
+    function showRoute(hash){
+      // normalise
+      if(!routes.includes(hash)) hash = '#home';
+      document.querySelectorAll('.navlink').forEach(a=>a.classList.toggle('active', a.getAttribute('data-route')===hash));
+      document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+      if(hash === '#products' || hash === '#home') document.getElementById('home').classList.add('active');
+      if(hash === '#products') document.getElementById('products') && document.getElementById('products').scrollIntoView({behavior:'smooth'});
+      // show cart aside on larger screens
+      if(hash === '#cart') document.getElementById('cartPage').classList.add('active');
+      if(hash === '#about') document.getElementById('about').classList.add('active');
+      if(hash === '#contact') document.getElementById('contact').classList.add('active');
+      if(hash === '#policy') document.getElementById('policy').classList.add('active');
+      if(hash === '#admin') document.getElementById('admin').classList.add('active');
+    }
+
+    window.addEventListener('hashchange', ()=> showRoute(location.hash));
+    showRoute(location.hash || '#home');
+
+    // ----- Demo product data (initial test cases) -----
+    const demoProducts = [
+      {id: 'sku-001', title: 'Wireless Earbuds', price: 2500, image: '', desc:'High quality sound'},
+      {id: 'sku-002', title: 'Smart Watch', price: 4500, image: '', desc:'Fitness & notifications'},
+      {id: 'sku-003', title: 'Portable Charger', price: 1800, image: '', desc:'10000mAh fast charge'},
+      {id: 'sku-004', title: 'Phone Case', price: 399, image: '', desc:'Shockproof'},
+    ];
+
+    // Load products from localStorage or seed demo
+    function loadProducts(){
+      try{
+        const raw = localStorage.getItem('shm_products');
+        if(raw) return JSON.parse(raw);
+      }catch(e){console.error('products parse error',e)}
+      localStorage.setItem('shm_products', JSON.stringify(demoProducts));
+      return demoProducts;
+    }
+
+    function saveProducts(list){localStorage.setItem('shm_products', JSON.stringify(list));}
+
+    // render products
+    function renderProducts(){
+      const list = loadProducts();
+      const container = document.getElementById('products');
+      container.innerHTML = '';
+      const tmpl = document.getElementById('productTemplate');
+      list.forEach(p => {
+        const node = tmpl.content.cloneNode(true);
+        const img = node.querySelector('img');
+        img.src = p.image || 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="360" height="180"><rect width="100%" height="100%" fill="%23f8fafc"/><text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle" font-size="14" fill="%236b7280">'+encodeURIComponent(p.title)+'</text></svg>';
+        node.querySelector('h4').textContent = p.title;
+        node.querySelector('.sku').textContent = p.id;
+        node.querySelector('.priceVal').textContent = p.price;
+        node.querySelector('.addToCart').addEventListener('click', ()=> addToCart(p.id));
+        container.appendChild(node);
+      });
+    }
+
+    // ----- Cart logic -----
+    function loadCart(){
+      try{ const c = JSON.parse(localStorage.getItem('shm_cart')||'[]'); return c; }catch(e){return []}
+    }
+    function saveCart(cart){ localStorage.setItem('shm_cart', JSON.stringify(cart)); }
+
+    function addToCart(sku, qty=1){
+      const products = loadProducts();
+      const p = products.find(x=>x.id===sku);
+      if(!p) return alert('Product not found');
+      const cart = loadCart();
+      const existing = cart.find(i=>i.id===sku);
+      if(existing) existing.qty += qty; else cart.push({id:sku, qty:qty, title:p.title, price:p.price});
+      saveCart(cart); updateCartUI();
+    }
+
+    function updateCartUI(){
+      const cart = loadCart();
+      document.getElementById('cartCount').textContent = cart.reduce((s,i)=>s+i.qty,0);
+      document.getElementById('cartTotal').textContent = cart.reduce((s,i)=>s + (i.price*i.qty),0);
+      const list = document.getElementById('cartList'); list.innerHTML = '';
+      cart.forEach(item=>{
+        const div = document.createElement('div'); div.className='cart-item';
+        div.innerHTML = '<img src="data:image/svg+xml;utf8,<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"80\" height=\"80\"><rect width=\"100%\" height=\"100%\" fill=\"%23eef2ff\"/></svg>' +
+        '<div style="flex:1"><div style="font-weight:700">'+item.title+'</div><div class="muted">Rs '+item.price+' × '+item.qty+'</div></div>' +
+        '<div><button data-sku="'+item.id+'" class="btn" style="background:#ef4444">-</button></div>';
+        list.appendChild(div);
+      });
+      // attach decrement handlers
+      list.querySelectorAll('button[data-sku]').forEach(b=> b.addEventListener('click', ()=>{
+        const sku = b.getAttribute('data-sku');
+        const cart = loadCart(); const idx = cart.findIndex(x=>x.id===sku); if(idx>-1){ cart[idx].qty--; if(cart[idx].qty<=0) cart.splice(idx,1); saveCart(cart); updateCartUI(); }
+      }));
+    }
+
+    document.getElementById('clearCart').addEventListener('click', ()=>{ localStorage.removeItem('shm_cart'); updateCartUI(); });
+
+    document.getElementById('checkoutBtn').addEventListener('click', ()=>{
+      const cart = loadCart(); if(cart.length===0) return alert('Cart is empty');
+      // Mock checkout - show order summary and "simulate" payment
+      const total = cart.reduce((s,i)=>s + (i.price*i.qty),0);
+      if(confirm('Proceed to pay Rs '+total+'? (This is a demo — no real payment)')){
+        // simulate order id and clear cart
+        const order = { id: 'ORD-' + Date.now(), items: cart, total: total, date: new Date().toISOString() };
+        // save orders to localStorage
+        const orders = JSON.parse(localStorage.getItem('shm_orders')||'[]'); orders.push(order); localStorage.setItem('shm_orders', JSON.stringify(orders));
+        localStorage.removeItem('shm_cart'); updateCartUI(); alert('Payment simulated. Order ID: '+order.id);
+      }
+    });
+
+    // ----- Admin product management (simple password) -----
+    function requireAdmin(){
+      const pw = sessionStorage.getItem('shm_admin_auth');
+      if(pw === 'true') return true;
+      const input = prompt('Enter admin password to continue (demo):');
+      if(input === 'shmadmin'){ sessionStorage.setItem('shm_admin_auth','true'); return true; }
+      alert('Wrong password'); return false;
+    }
+
+    document.getElementById('addProduct').addEventListener('click', ()=>{
+      if(!requireAdmin()) return;
+      const title = document.getElementById('p_title').value.trim();
+      const price = parseFloat(document.getElementById('p_price').value) || 0;
+      const image = document.getElementById('p_image').value.trim();
+      if(!title || price<=0) return alert('Provide title and price');
+      const products = loadProducts();
+      const id = 'sku-'+Math.random().toString(36).slice(2,8);
+      products.push({id, title, price, image}); saveProducts(products); renderProducts(); renderAdminList();
+      document.getElementById('p_title').value=''; document.getElementById('p_price').value=''; document.getElementById('p_image').value='';
+    });
+
+    function renderAdminList(){
+      const list = loadProducts(); const container = document.getElementById('adminList'); container.innerHTML='';
+      list.forEach(p=>{
+        const row = document.createElement('div'); row.style.display='flex'; row.style.justifyContent='space-between'; row.style.alignItems='center'; row.style.padding='8px 0';
+        row.innerHTML = '<div><strong>'+p.title+'</strong><div class="muted">'+p.id+' — Rs '+p.price+'</div></div><div style="display:flex;gap:8px"><button class="btn edit">Edit</button><button class="btn" style="background:#ef4444">Delete</button></div>';
+        container.appendChild(row);
+        row.querySelector('.edit').addEventListener('click', ()=>{
+          if(!requireAdmin()) return; const t = prompt('New title', p.title); const pr = prompt('New price', p.price); if(t) p.title=t; if(pr) p.price=parseFloat(pr)||p.price; saveProducts(list); renderProducts(); renderAdminList();
+        });
+        row.querySelector('button[style]').addEventListener('click', ()=>{
+          if(!requireAdmin()) return; if(confirm('Delete product?')){ const idx = list.findIndex(x=>x.id===p.id); if(idx>-1) list.splice(idx,1); saveProducts(list); renderProducts(); renderAdminList(); }
+        });
+      });
+    }
+
+    // import/export
+    document.getElementById('exportData').addEventListener('click', ()=>{
+      const data = {products: loadProducts(), orders: JSON.parse(localStorage.getItem('shm_orders')||'[]')};
+      const blob = new Blob([JSON.stringify(data, null, 2)], {type:'application/json'});
+      const url = URL.createObjectURL(blob); const a = document.createElement('a'); a.href=url; a.download='shm_data.json'; a.click(); URL.revokeObjectURL(url);
+    });
+
+    document.getElementById('importData').addEventListener('click', ()=>{
+      if(!requireAdmin()) return;
+      const txt = prompt('Paste JSON here to import (products + orders)');
+      try{
+        const obj = JSON.parse(txt); if(obj.products) saveProducts(obj.products); if(obj.orders) localStorage.setItem('shm_orders', JSON.stringify(obj.orders)); renderProducts(); renderAdminList(); alert('Imported');
+      }catch(e){alert('Invalid JSON')}
+    });
+
+    // contact form (simple simulated submission)
+    document.getElementById('contactForm').addEventListener('submit', function(e){ e.preventDefault(); alert('Message sent (demo)'); this.reset(); });
+
+    // search
+    document.getElementById('search').addEventListener('input', function(){ const q = this.value.toLowerCase(); const items = loadProducts().filter(p=> p.title.toLowerCase().includes(q) || p.id.toLowerCase().includes(q)); const container = document.getElementById('products'); container.innerHTML=''; const tmpl = document.getElementById('productTemplate'); items.forEach(p=>{ const node = tmpl.content.cloneNode(true); node.querySelector('img').src = p.image || 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="360" height="180"><rect width="100%" height="100%" fill="%23f8fafc"/><text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle" font-size="14" fill="%236b7280">'+encodeURIComponent(p.title)+'</text></svg>'; node.querySelector('h4').textContent = p.title; node.querySelector('.sku').textContent = p.id; node.querySelector('.priceVal').textContent = p.price; node.querySelector('.addToCart').addEventListener('click', ()=> addToCart(p.id)); container.appendChild(node); }); });
+
+    // initial render
+    renderProducts(); updateCartUI(); renderAdminList();
+
+    // small UX: navigate to #products when clicking Shop Now
+    document.querySelectorAll('[data-route]').forEach(a=> a.addEventListener('click', (e)=>{ e.preventDefault(); location.hash = a.getAttribute('data-route'); showRoute(location.hash); }))
+
+    // expose some helpers for debugging in console
+    window.SHM = { loadProducts, saveProducts, loadCart, addToCart };
+  </script>
+</body>
+</html>
